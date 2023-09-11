@@ -1,0 +1,18 @@
+<div th:fragment="pag(curr,list,query)" xmlns:th="http://www.thymeleaf.org">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item">
+                <a aria-label="Previous" class="page-link" th:href="${query.formatted((curr-1))}">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item" th:each="item : ${list}"><a class="page-link" th:href="${query.formatted(item)}"
+                                                              th:text="${item}"></a></li>
+            <li class="page-item">
+                <a aria-label="Next" class="page-link" th:href="${query.formatted((curr+1))}">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

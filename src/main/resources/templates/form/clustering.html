@@ -1,0 +1,5 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="clustering(articlesClustering)"
+     th:each="item : ${articlesClustering}">
+    <h1 th:text="'Cluster name '+${item.getCluster()}"></h1>
+    <div th:replace="form/fragments.html :: fragment(articles=${item.getDto()})"></div>
+</div>

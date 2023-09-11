@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet id="set_ver_1" author="GreedyQuantifier">
+
+        <createTable tableName="languages">
+            <column autoIncrement="true" name="language_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_languages"/>
+            </column>
+            <column name="language" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="language" constraintName="uc_languages_language" tableName="languages"/>
+
+        <createTable tableName="articles">
+            <column name="article_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_articles"/>
+            </column>
+            <column name="article" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="body" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="language_id" type="BIGINT"/>
+            <column name="date" type="DATE"/>
+            <column name="rate" type="BIGINT"/>
+            <column name="view" type="BIGINT"/>
+        </createTable>
+        <addUniqueConstraint columnNames="article" constraintName="uc_articles_article" tableName="articles"/>
+        <addForeignKeyConstraint baseColumnNames="language_id" baseTableName="articles"
+                                 constraintName="FK_ARTICLES_ON_LANGUAGE" referencedColumnNames="language_id"
+                                 referencedTableName="languages"/>
+
+
+        <createTable tableName="roles">
+            <column autoIncrement="true" name="role_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_roles"/>
+            </column>
+            <column name="name_role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="users">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="users" constraintName="FK_USERS_ON_ROLE"
+                                 referencedColumnNames="role_id" referencedTableName="roles"/>
+
+
+        <createTable tableName="comments">
+            <column autoIncrement="true" name="comment_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_comments.sql"/>
+            </column>
+            <column name="article_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rate" type="BIGINT"/>
+            <column name="date" type="DATETIME"/>
+            <column name="text" type="VARCHAR(255)"/>
+        </createTable>
+
+        <createTable tableName="tags">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tags"/>
+            </column>
+            <column name="article_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="schema" type="VARCHAR(255)"/>
+        </createTable>
+
+
+        <createSequence sequenceName="tag_seq" startValue="1" incrementBy="50" schemaName="public"/>
+
+        <createSequence sequenceName="article_seq" startValue="1" incrementBy="50" schemaName="public"/>
+
+        <createSequence sequenceName="comment_seq" startValue="1" incrementBy="50" schemaName="public"/>
+
+        <createSequence sequenceName="user_seq" startValue="1" incrementBy="50" schemaName="public"/>
+
+
+    </changeSet>
+
+    <changeSet id="ser_ver_1.1" author="GreedyQuantifier">
+        <insert tableName="roles">
+            <column name="role_id" value="1"/>
+            <column name="name_role" value="admin"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="role_id" value="2"/>
+            <column name="name_role" value="user"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="role_id" value="3"/>
+            <column name="name_role" value="observer"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" value="1"/>
+            <column name="email" value="admin"/>
+            <column name="email" value="admin"/>
+            <column name="password" value="$2a$10$ApNeyP.Adeb1qJtlylNfl.GWacTKo0jkRsvvalijdk/4RjF1A6qLq"/>
+            <column name="role_id" value="1"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" value="2"/>
+            <column name="email" value="user"/>
+            <column name="password" value="$2a$10$ApNeyP.Adeb1qJtlylNfl.GWacTKo0jkRsvvalijdk/4RjF1A6qLq"/>
+            <column name="role_id" value="3"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="ser_ver_1.2" author="GreedyQuantifier">
+        <addColumn tableName="tags" >
+            <column name="cluster" type="VARCHAR(255)">
+            </column>
+        </addColumn>
+
+        <modifyDataType tableName="tags" columnName="schema" newDataType="bigint"/>
+
+        <createTable tableName="schemas">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_schemas"/>
+            </column>
+            <column name="schema" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="schema" baseTableName="tags" constraintName="FK_TAGS_ON_SCHEMAS"
+                                 referencedColumnNames="id" referencedTableName="schemas"/>
+
+    </changeSet>
+
+
+
+
+</databaseChangeLog>
+
+

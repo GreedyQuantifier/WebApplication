@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@100;300&display=swap');
+
+
+:root {
+    --purple: #e41b6f;
+    --off-white: #f8f8f8;
+    --off-black: #444444;
+    --shadow: 0 0 30px #cccccc;
+    --xs: 0.2rem;
+    --sm: 0.5rem;
+    --md: 0.8rem;
+    --lg: 1rem;
+    --xlg: 1.5rem;
+    --xxlg: 2rem;
+    --transition: 0.3s linear all;
+}
+
+body {
+    font-family: 'Work Sans', sans-serif;
+}
+
+main {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.con {
+    box-shadow: var(--shadow);
+    border-radius: 2px;
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: var(--lg);
+    padding: var(--xlg) var(--xxlg);
+    width: 40vw;
+}
+
+h1 {
+    color: var(--off-black);
+}
+
+.input-container {
+    display: grid;
+    grid-template-columns: 1fr 0.3fr;
+    column-gap: var(--lg);
+    row-gap: var(--sm);
+}
+
+input {
+    border: 1px solid var(--purple);
+    outline-color: var(--purple);
+    padding: var(--sm);
+}
+
+button {
+    background-color: var(--purple);
+    color: var(--off-white);
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    outline: none;
+    transition: var(--transition);
+}
+
+button:hover {
+    background-color: hsl(335, 89%, 40%);
+}
+
+.tag-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background-color: var(--purple);
+    border-radius: 10px;
+    color: var(--off-white);
+    font-size: var(--md);
+    margin-bottom: var(--sm);
+    margin-right: var(--sm);
+    padding: var(--xs) var(--sm);
+}
+
+
+.remove-tag {
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+@media screen and (max-width: 1024px) {
+    form {
+        width: 75vw;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    main {
+        justify-content: flex-start;
+        margin: var(--lg) 0;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .input-container {
+        grid-template-columns: 1fr;
+    }
+
+    button {
+        padding: var(--sm) 0;
+    }
+}
+
+.flex_my_row {
+    flex-direction: row;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}

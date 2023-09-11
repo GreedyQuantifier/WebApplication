@@ -1,0 +1,14 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="fragment(articles)" class="row row-cols-3 row-cols-md-4 g-4">
+    <div class="card col-3" th:each="item: ${articles}">
+        <a th:href='${"/page/"+item.site}'>
+            <img  alt="..." class="card-img-top" th:src="${item.image}">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${item.title}"></h5>
+                <p class="card-text" th:text="${item.description}"></p>
+                <div class="card-footer">
+                    <small class="text-muted"></small>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
