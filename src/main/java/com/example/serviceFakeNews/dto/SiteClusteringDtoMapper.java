@@ -19,7 +19,7 @@ public class SiteClusteringDtoMapper {
 
     public static List<SiteClusteringDto> articlesToSites(List<ArticleWithSchema> articles) {
 
-        if (articles.size() == 0)
+        if (articles.isEmpty())
             return new ArrayList<>();
 
         List<SiteClusteringDto> siteClusteringDtos = new ArrayList<>();

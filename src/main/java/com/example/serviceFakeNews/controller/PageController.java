@@ -20,14 +20,13 @@ public class PageController {
     public String getIndexWithClustering(@RequestParam(name = "schema", required = false, defaultValue = "") String schema,
                                          @RequestParam(name = "query", required = false, defaultValue = "") String query,
                                          @RequestParam(name = "page", required = false, defaultValue = "1") String page,
-                                         @RequestParam(name = "page", required = false, defaultValue = "20") String countOnPage,
+                                         @RequestParam(name = "count", required = false, defaultValue = "20") String countOnPage,
                                          Model model) {
 
-        service.getIndex(model, page, countOnPage,query, schema);
+        service.getIndex(model, page, countOnPage, query, schema);
 
         return "index";
     }
-
 
     @GetMapping("/page/{topic}")
     public String getTopicPage(@PathVariable(name = "topic") String topic,
@@ -37,7 +36,6 @@ public class PageController {
         service.getPage(topic, model);
 
         return "topic";
-
     }
 }
 

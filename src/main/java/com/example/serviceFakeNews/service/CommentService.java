@@ -15,10 +15,7 @@ public class CommentService {
 
 
     public List<CommentEntity> getComments(Long id) {
-        List<CommentEntity> comments = repo.findByIdArticle(id);
-
-
-        return comments;
+        return repo.findByIdArticle(id);
     }
 
 

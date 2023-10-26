@@ -5,9 +5,9 @@ import com.example.serviceFakeNews.entity.ArticleEntity;
 import com.example.serviceFakeNews.entity.CommentEntity;
 import com.example.serviceFakeNews.exception.NotFoundException;
 import com.example.serviceFakeNews.repository.ArticleRepo;
-import com.example.serviceFakeNews.utils.PaginationUtil;
+import com.example.serviceFakeNews.utils.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -30,58 +30,49 @@ public class ArticleService {
 
 
     public Model getPage(String site, Model model) throws NotFoundException {
-        Optional<ArticleEntity> page = Optional.ofNullable(articleRepo.findByArticle(site));
-        if (page.isEmpty())
-            throw new NotFoundException("Not article");
+        ArticleEntity page = Optional.ofNullable(articleRepo.findByArticle(site)).orElseThrow(() -> new NotFoundException("That article not found"));
 
 
-        List<CommentEntity> comments = commentService.getComments(page.get().getId());
+        List<CommentEntity> comments = commentService.getComments(page.getId());
 
-        model.addAttribute("page", page.get());
+        model.addAttribute("page", page);
         model.addAttribute("comments", comments);
-        model.addAttribute("metrics", ModelDtoMapper.toModelDto(page.get(), comments));
+        model.addAttribute("metrics", ModelDtoMapper.toModelDto(page, comments));
 
 
         return model;
     }
 
 
-    public Model getIndex(Model model, String page, String countOnPage, String query, String schema) {
-        int count = (int) articleRepo.count();
-        System.out.println(count);
-        PaginationUtil.Pagination pagination =
-                PaginationUtil.pagination(count, page, countOnPage, PaginationUtil.createQuery(schema, query));
-        Pageable of = PageRequest.of(pagination.getCurrPage() - 1, pagination.getCurrPage());
+    public Model getIndex(Model model, String page, String countArticle, String query, String schema) {
+        Long count = schema.isEmpty() ? articleRepo.count() : articleRepo.countSchemas(schema);
+        Pagination pagination = new Pagination(count, page, countArticle);
+        pagination.createQuery(schema, query);
+
+        Pageable of = pagination.pageable();
+
 
         model.addAttribute("pagination", pagination);
 
-        if (!schema.isEmpty())
-            model.addAttribute("articlesClustering",
-                    SiteClusteringDtoMapper.articlesToSites(getArticleWithClustering(schema, pagination.getCurrPage(), of)));
-        else
-            model.addAttribute("articles",
-                    articleRepo.findAll(of).stream().map(SiteDtoMapper::toSiteDto).toList());
+        if (!schema.isEmpty()) {
+            model.addAttribute("articlesClustering", SiteClusteringDtoMapper.articlesToSites(articleRepo.findBySchemaWithPageable(of, schema)));
+        } else {
+            Page<ArticleEntity> all = articleRepo.findAll(of);
+            model.addAttribute("articles", all.stream().map(SiteDtoMapper::toSiteDto).toList());
+        }
         model.addAttribute("auth", authService);
 
         return model;
     }
 
     public List<ModelDto> getData() {
-        List<ModelDto> list =
-                articleRepo.findAll().stream().map(entity ->
-                        ModelDtoMapper.toModelDto(entity, commentService.getComments(entity.getId())))
-                        .collect(Collectors.toList());
-
-        return list;
+        return articleRepo.findAll().stream().map(entity ->
+                ModelDtoMapper.toModelDto(entity, commentService.getComments(entity.getId()))).collect(Collectors.toList());
     }
 
 
     public List<ArticleWithSchema> getArticleWithClustering(String schema) {
         return articleRepo.findBySchema(schema);
-    }
-
-    public List<ArticleWithSchema> getArticleWithClustering(String schema, Integer page, Pageable of) {
-        return articleRepo.findBySchemaWithPageable(of, schema);
     }
 
 }

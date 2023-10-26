@@ -1,6 +1,5 @@
 package com.example.serviceFakeNews.configure;
 
-
 import com.example.serviceFakeNews.utils.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
@@ -36,9 +35,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             try {
                 username = jwtTokenUtils.getUsername(jwt);
             } catch (ExpiredJwtException e) {
-                log.debug("Время жизни токена вышло");
+                log.debug("Token is no longer valid.");
             } catch (SignatureException e) {
-                log.debug("Подпись неправильная");
+                log.debug("Not valid signature.");
             }
         }
 
@@ -53,6 +52,5 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
 
     }
-
 
 }

@@ -16,18 +16,15 @@ public class ArticleController {
     @Autowired
     private AuthService authService;
 
-
     @PostMapping("/auth")
     public ResponseEntity createAuthToken(@RequestParam String name, @RequestParam String pass) {
         return authService.responseEntity(name, pass);
     }
 
-
     @GetMapping("/data/")
     public ResponseEntity getData() {
         return ResponseEntity.ok(articleService.getData());
     }
-
 
     @GetMapping("/data/{schema}/")
     public ResponseEntity getDataWithSchema(@PathVariable String schema) {

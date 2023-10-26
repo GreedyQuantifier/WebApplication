@@ -1,15 +1,8 @@
 package com.example.serviceFakeNews.dto;
 
-import com.example.serviceFakeNews.entity.CommentEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -22,13 +15,13 @@ public class ModelDto {
     Long rating;
 
 
-    Long countComments = 0l;
-    Long uniqUser = 0l;
+    Long countComments = 0L;
+    Long uniqUser = 0L;
 
-    Long rateAuthorsComments = 0l;
-    Long cdAnswer = 0l;
-    Long dateAgo = 0l;
-    Long numberRound = 0l;
+    Long rateAuthorsComments = 0L;
+    Long cdAnswer = 0L;
+    Long dateAgo = 0L;
+    Long numberRound = 0L;
 
 
 }
